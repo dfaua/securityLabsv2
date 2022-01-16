@@ -16,6 +16,10 @@ def hashing_password(password_to_hash):
     str_password_salt = hashed_password + ":" + salt
     return str_password_salt
 
+def hashing_password_salt(list_password_salt):
+    hashed_password = hashlib.sha512(list_password_salt[1] + list_password_salt[0].encode()).hexdigest()
+    return hashed_password
+
 
 def ciphering_something(text_to_cipher):
     nonce = urandom(24)
@@ -26,8 +30,8 @@ def ciphering_something(text_to_cipher):
 
 
 def deciphering_something(list_to_decipher):
-    deciphered = XSalsa20_xor(list_to_decipher[0], list_to_decipher[])
-    return
+    deciphered = XSalsa20_xor(list_to_decipher[1], list_to_decipher[3], list_to_decipher[0])
+    return deciphered
 
 
 def registration(list_login_password):
@@ -49,6 +53,14 @@ def check_user(list_login_password):
             user = i
     if range(user) == 0:
         return "No such user"
+    deciphered_hash_salt = deciphering_something(user)
+    list_hash_salt = deciphered_hash_salt.split(":")
+    list_to_hashing = [list_login_password[1], list_hash_salt[1]]
+    hashed_new_pas = hashing_password_salt(list_to_hashing)
+    if hashed_new_pas == list_hash_salt[0]:
+        return "User found"
+    else:
+        return "Password is incorrect"
 
 
 

@@ -1,6 +1,6 @@
 from flask import Flask,request,render_template
 import pickle
-from task_1 import  registration
+from task_1 import  registration, check_user
 
 app = Flask(__name__)
 
@@ -14,13 +14,9 @@ database={'nachi':'123','james':'aac','karthik':'asdsf'}
 def login():
     name1=request.form['username']
     pwd=request.form['password']
-    if name1 not in database:
-	    return render_template('login.html',info='Invalid User')
-    else:
-        if database[name1]!=pwd:
-            return render_template('login.html',info='Invalid Password')
-        else:
-	         return render_template('home.html',name=name1)
+    list_login_pas = [name1, pwd]
+    return render_template('login.html', info=check_user(list_login_pas))
+
 
 @app.route('/form_register',methods=['POST','GET'])
 def register():

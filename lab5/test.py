@@ -1,25 +1,7 @@
-import sqlite3
+l2 = []
+l1 = ["asdasd", "asdasd"]
 
-db = sqlite3.connect('users.db')
-sql = db.cursor()
-
-sql.execute("""CREATE TABLE IF NOT EXISTS users (login TEXT, password TEXT, cash BIGINT)""")
-
-db.commit()
-
-user_login = input('Login: ')
-user_password = input('Password: ')
-
-sql.execute("SELECT login from users WHERE login = '{user_login}'")
-if sql.fetchone() is None:
-    sql.execute(f"INSERT INTO users VALUES(?, ?, ?)", (user_login, user_password, 0))
-    db.commit()
-    print("Registered")
+if not l2:
+    print("list is empty")
 else:
-    print("Already exists")
-
-login_to_search = "DFE"
-
-for i in sql.execute('SELECT * FROM users'):
-    if i[0] == "dsf":
-        print(i)
+    print("not empty")

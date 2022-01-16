@@ -30,7 +30,8 @@ def ciphering_something(text_to_cipher):
 
 
 def deciphering_something(list_to_decipher):
-    deciphered = XSalsa20_xor(list_to_decipher[1], list_to_decipher[3], list_to_decipher[0])
+    print("deciphering something income: ", list_to_decipher)
+    deciphered = XSalsa20_xor(list_to_decipher[1], list_to_decipher[3], list_to_decipher[2])
     return deciphered
 
 
@@ -48,13 +49,18 @@ def registration(list_login_password):
 
 def check_user(list_login_password):
     user = []
+    print(list_login_password)
     for i in database:
-        if i[1] == list_login_password[0]:
+        print("I'm in 0001")
+        if i[0] == list_login_password[0]:
+            print("in 0002")
+            print(i)
             user = i
-    if range(user) == 0:
+    if not user:
         return "No such user"
     deciphered_hash_salt = deciphering_something(user)
-    list_hash_salt = deciphered_hash_salt.split(":")
+    #list_hash_salt = deciphered_hash_salt.split(":")
+    list_hash_salt = list(deciphered_hash_salt.split(":"))
     list_to_hashing = [list_login_password[1], list_hash_salt[1]]
     hashed_new_pas = hashing_password_salt(list_to_hashing)
     if hashed_new_pas == list_hash_salt[0]:

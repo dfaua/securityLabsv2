@@ -10,7 +10,7 @@ from task_2 import  new_user_envelope, return_DEK
 
 database = []
 database_homecity_phonenumber = []
-dict_user_KEK = {}
+database_user_DEKnonce_KEK = []
 
 
 def generate_key():
@@ -44,7 +44,7 @@ def ciphering_something_key_nonce(list_tocipher_key_nonce):
     return cipher_text
 
 def deciphering_something(list_toDecipher_key_nonce):
-    #print("pos 1324 deciphering something income: ", list_toDecipher_key_nonce)
+    print("pos 1324 deciphering something income: ", list_toDecipher_key_nonce)
     deciphered = XSalsa20_xor(list_toDecipher_key_nonce[1], list_toDecipher_key_nonce[3], list_toDecipher_key_nonce[2])
     return deciphered
 
@@ -66,10 +66,12 @@ def registration(list_login_password_homecity_phonenumber):
     ciphered_homecity_phonenumber = ciphering_something_key_nonce([str_homecity_phonenumber, generated_key, generated_nonce])
     to_db_user_homecity_phonenumber = [user_login, ciphered_homecity_phonenumber]
     database_homecity_phonenumber.append(to_db_user_homecity_phonenumber)
-    DEK = generated_key + ":" + generated_nonce
-    KEK = new_user_envelope([user_login, DEK])
-    DEK = ""
-    dict_user_KEK[user_login] = KEK
+    print("BEFORE decode generated key: ", generated_key, " generated nonce: ", generated_nonce)
+    #generated_key = generated_key.decode()
+    #generated_nonce = generated_nonce.decode()
+    print("AFTER decode generated key: ", generated_key, " generated nonce: ", generated_nonce)
+    KEK = new_user_envelope([user_login, generated_key])
+    database_user_DEKnonce_KEK.append([user_login, generated_nonce, KEK])
     generated_key = "" #erasing DEK
     generated_nonce = "" #erasing DEK
 
@@ -79,6 +81,14 @@ def registration(list_login_password_homecity_phonenumber):
     for i in database_homecity_phonenumber:
         print("hc pn: ", i)
     return "Done"
+
+def receiving_KEK (user):
+    user_KEK = ""
+    for i in database_user_DEKnonce_KEK:
+        if i[0] == user:
+            user_KEK = i[2]
+    DEK = return_DEK([user, user_KEK])
+    return DEK
 
 def check_user(list_login_password_userToCheck):
     user = []
@@ -108,7 +118,12 @@ def check_user(list_login_password_userToCheck):
             if i[0] == user_to_check:
                 user_to_check_from_db = i
                 str_to_dechiper = user_to_check_from_db[1]
-                str_hm_pn_userToCheck = deciphering_something(["", str_to_dechiper, temp_key, temp_nonce])
+                DEK_key = receiving_KEK(user_to_check)
+                DEK_nonce = ""
+                for i in database_user_DEKnonce_KEK:
+                    if i[0] == user_to_check:
+                        DEK_nonce = i[1]
+                str_hm_pn_userToCheck = deciphering_something(["", str_to_dechiper, DEK_key, DEK_nonce])
                 list_plain_homecity_phonenumber = str_hm_pn_userToCheck.decode().split(":")
                 user_to_check_answer = "User: " + user_to_check + ", Home city: " + list_plain_homecity_phonenumber[0] + ", Phone number: " + list_plain_homecity_phonenumber[1]
             if not user_to_check_from_db:

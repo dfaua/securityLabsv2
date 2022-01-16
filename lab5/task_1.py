@@ -1,5 +1,7 @@
 import hashlib
 import uuid
+import string
+import random
 from os import urandom
 from salsa20 import XSalsa20_xor
 
@@ -17,9 +19,16 @@ def hashing_password(password_to_hash):
 
 def ciphering_something(text_to_cipher):
     nonce = urandom(24)
+    key = urandom(32)
+    cipher_text = XSalsa20_xor(text_to_cipher.encode(), nonce, key)
+    list_cipher_key_nonce = [cipher_text, key, nonce]
+    return list_cipher_key_nonce
+
+pas = "12324tgef12f"
+print("pas: ", pas)
+hashed_pas = hashing_password(pas)
+print("hashed pas: ", hashed_pas)
+cipher_key_nonce = ciphering_something(hashed_pas)
+print("cipher, key, nonce: ", cipher_key_nonce)
 
 
-
-
-
-print(hashing_password("12345"))

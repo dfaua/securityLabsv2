@@ -1,3 +1,3 @@
 from os import urandom
 
-print(urandom(24))
+print("sgfsfwdsfsdf".encode())

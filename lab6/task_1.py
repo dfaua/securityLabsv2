@@ -5,14 +5,19 @@ import string
 import random
 from os import urandom
 from salsa20 import XSalsa20_xor
+from task_2 import  new_user_envelope, return_DEK
 
 
 database = []
 database_homecity_phonenumber = []
+dict_user_KEK = {}
 
-temp_key = b'"\xee\x93k\xe1C\x96\xa4\xb2\x8a\xe6\x03\xe4\xc9\xd9\xec\xb2zb\x18\xfaO\x11\xc1\x14\x1e\t\xaa\x07v-\xa6'
-temp_nonce = b'\x17\xbb\xf2\x8d}\xad\xa7\x81J4f\x03\x0c\xca\xd2g9\x8f\x15"OR\xd0\x15'
 
+def generate_key():
+    return urandom(32)
+
+def generate_nonce():
+    return urandom(24)
 
 def hashing_password(password_to_hash):
     salt = uuid.uuid4().hex
@@ -55,10 +60,19 @@ def registration(list_login_password_homecity_phonenumber):
     list_login_hash_key_nonce = [user_login, list_cipher_key_nonce[0], list_cipher_key_nonce[1], list_cipher_key_nonce[2]]
     database.append(list_login_hash_key_nonce)
 
+    generated_key = generate_key()
+    generated_nonce = generate_nonce()
     str_homecity_phonenumber = home_city + ":" + phone_number
-    ciphered_homecity_phonenumber = ciphering_something_key_nonce([str_homecity_phonenumber, temp_key, temp_nonce])
+    ciphered_homecity_phonenumber = ciphering_something_key_nonce([str_homecity_phonenumber, generated_key, generated_nonce])
     to_db_user_homecity_phonenumber = [user_login, ciphered_homecity_phonenumber]
     database_homecity_phonenumber.append(to_db_user_homecity_phonenumber)
+    DEK = generated_key + ":" + generated_nonce
+    KEK = new_user_envelope([user_login, DEK])
+    DEK = ""
+    dict_user_KEK[user_login] = KEK
+    generated_key = "" #erasing DEK
+    generated_nonce = "" #erasing DEK
+
 
     for i in database:
         print("user, pass", i)

@@ -17,6 +17,7 @@ def hashing_password(password_to_hash):
     return str_password_salt
 
 def hashing_password_salt(list_password_salt):
+    print("hashing password salt income: ", list_password_salt)
     hashed_password = hashlib.sha512(list_password_salt[1] + list_password_salt[0].encode()).hexdigest()
     return hashed_password
 
@@ -59,9 +60,12 @@ def check_user(list_login_password):
     if not user:
         return "No such user"
     deciphered_hash_salt = deciphering_something(user)
+    #print("check user -- str to list before decoding: ", deciphered_hash_salt)
+    deciphered_hash_salt = deciphered_hash_salt.decode()
+    #print("check user -- str to list: ", deciphered_hash_salt)
     #list_hash_salt = deciphered_hash_salt.split(":")
     list_hash_salt = list(deciphered_hash_salt.split(":"))
-    list_to_hashing = [list_login_password[1], list_hash_salt[1]]
+    list_to_hashing = [list_login_password[1], list_hash_salt[1].encode()]
     hashed_new_pas = hashing_password_salt(list_to_hashing)
     if hashed_new_pas == list_hash_salt[0]:
         return "User found"

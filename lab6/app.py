@@ -14,16 +14,19 @@ database={'nachi':'123','james':'aac','karthik':'asdsf'}
 def login():
     name1=request.form['username']
     pwd=request.form['password']
-    list_login_pas = [name1, pwd]
-    return render_template('login.html', info=check_user(list_login_pas))
+    user_to_check = request.form['user_to_check']
+    list_login_pas_usertocheck = [name1, pwd, user_to_check]
+    return render_template('login.html', info=check_user(list_login_pas_usertocheck))
 
 
 @app.route('/form_register',methods=['POST','GET'])
 def register():
     name1=request.form['username_registration']
     pwd=request.form['password_registration']
-    list_login_pass = [name1, pwd]
-    return render_template('login.html', info=registration(list_login_pass))
+    home_city = request.form['home_city_registration']
+    phone_number = request.form['phone_number_registration']
+    list_login_pass_homecity_phonenumber = [name1, pwd, home_city, phone_number]
+    return render_template('login.html', info=registration(list_login_pass_homecity_phonenumber))
 
 
 if __name__ == '__main__':

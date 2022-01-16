@@ -8,6 +8,7 @@ from salsa20 import XSalsa20_xor
 
 
 database = []
+database_homecity_phonenumber = []
 
 
 def hashing_password(password_to_hash):
@@ -29,6 +30,9 @@ def ciphering_something(text_to_cipher):
     list_cipher_key_nonce = [cipher_text, key, nonce]
     return list_cipher_key_nonce
 
+def ciphering_something_key_nonce(list_tocipher_key_nonce):
+    cipher_text = XSalsa20_xor(list_tocipher_key_nonce[0].encode(), list_tocipher_key_nonce[1].encode(), list_tocipher_key_nonce[2].encode())
+    return cipher_text
 
 def deciphering_something(list_to_decipher):
     print("deciphering something income: ", list_to_decipher)
@@ -36,14 +40,24 @@ def deciphering_something(list_to_decipher):
     return deciphered
 
 
-def registration(list_login_password):
+def registration(list_login_password_homecity_phonenumber):
     #print("YESSSS")
-    user_login = list_login_password[0]
-    user_password = list_login_password[1]
+    user_login = list_login_password_homecity_phonenumber[0]
+    user_password = list_login_password_homecity_phonenumber[1]
+    home_city = list_login_password_homecity_phonenumber[2]
+    phone_number = list_login_password_homecity_phonenumber[3]
     str_password_salt = hashing_password(user_password)
     list_cipher_key_nonce = ciphering_something(str_password_salt)
     list_login_hash_key_nonce = [user_login, list_cipher_key_nonce[0], list_cipher_key_nonce[1], list_cipher_key_nonce[2]]
     database.append(list_login_hash_key_nonce)
+
+    key = "\xbf)J\xe1Lv\x1amS\x86\xa2\xff*\xce\xfc\x99k0\xc2w>\xd7\x1c\xf0\xa6\xa4\xc3\x96m\x84\xf3I".encode()
+    nonce = "b\x8f'm7\x14<\x00l=;\xd0,\x13d\x81e\x92|\xddic\xb1\t".encode()
+
+    str_homecity_phonenumber = home_city + ":" + phone_number
+    ciphered_homecity_phonenumber = ciphering_something_key_nonce([str_homecity_phonenumber, key, nonce])
+    to_db_user_homecity_phonenumber = [user_login, ciphered_homecity_phonenumber]
+
     for i in database:
         print(i)
     return "Done"

@@ -1,7 +1,11 @@
-l2 = []
-l1 = ["asdasd", "asdasd"]
+from aead import AEAD
 
-if not l2:
-    print("list is empty")
-else:
-    print("not empty")
+cryptor = AEAD(AEAD.generate_key())
+
+print("cryptor: ", cryptor)
+
+l1 = ["Dasdsdfsdfsdfsdfdsfsfsdfsaslkdfjbvgfbhnjdkmqhbvefhcevfdumjynhtrgvfdsntgrnyil", "Fetydwfgytthgasdfasdfasfasdfasdfasdfasdfaddorov", "Security"]
+
+ct = cryptor.encrypt(l1[0].encode(), l1[1].encode())
+
+print("ct: ", ct)

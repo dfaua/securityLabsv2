@@ -3,6 +3,8 @@ import pickle
 from task_1 import  registration, check_user
 
 app = Flask(__name__)
+#app.run(ssl_context = ("SSC.crt", "private.key", "pass.bin"))
+app.run(ssl_context = ("SSC.crt", "private.key"))
 
 
 @app.route('/')

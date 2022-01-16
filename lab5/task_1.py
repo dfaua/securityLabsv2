@@ -8,7 +8,7 @@ from salsa20 import XSalsa20_xor
 
 hash_object = hashlib.sha512(b'password')
 hex_dig = hash_object.hexdigest()
-
+database = {}
 
 def hashing_password(password_to_hash):
     salt = uuid.uuid4().hex
@@ -23,6 +23,12 @@ def ciphering_something(text_to_cipher):
     cipher_text = XSalsa20_xor(text_to_cipher.encode(), nonce, key)
     list_cipher_key_nonce = [cipher_text, key, nonce]
     return list_cipher_key_nonce
+
+
+def registration(list_login_password):
+    database[list_login_password[0]] = list_login_password[1]
+    print(database)
+    return "You are successfully registered"
 
 pas = "12324tgef12f"
 print("pas: ", pas)

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+</head>
+<body bgcolor="orange">
+
+<form action="/form_login" method="post">
+  <h2></h2>Username:<br>
+  <input type="text" name='username'><br>
+  Password:<br>
+  <input  name='password' ><br><br>
+<input type="submit" value="Login">
+</form>
+
+<form action="/form_register" method="post">
+  <h2></h2>
+    Registration:<br><br>
+    Set username:<br>
+    <input type="text" name='username_registration'><br>
+    Set password:<br>
+    <input type="text" name='password_registration'><br><br>
+<input type="submit" value="Register">
+</form>
+
+
+<h1 >{{info}}</h1>
+
+</body>
+</html>

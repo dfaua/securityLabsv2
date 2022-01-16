@@ -1,24 +1,25 @@
-import uuid
-import hashlib
+from flask import Flask,request,render_template
+from task_1 import
+
+app = Flask(__name__)
 
 
-def hash_password(password):
-    # uuid используется для генерации случайного числа
-    salt = uuid.uuid4().hex
-    return hashlib.sha256(salt.encode() + password.encode()).hexdigest() + ':' + salt
+@app.route('/')
+def hello_world():
+    return render_template("login.html")
+database={'nachi':'123','james':'aac','karthik':'asdsf'}
 
+@app.route('/form_login',methods=['POST','GET'])
+def login():
+    name1=request.form['username']
+    pwd=request.form['password']
+    if name1 not in database:
+	    return render_template('login.html',info='Invalid User')
+    else:
+        if database[name1]!=pwd:
+            return render_template('login.html',info='Invalid Password')
+        else:
+	         return render_template('home.html',name=name1)
 
-def check_password(hashed_password, user_password):
-    password, salt = hashed_password.split(':')
-    return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
-
-
-new_pass = input('Введите пароль: ')
-hashed_password = hash_password(new_pass)
-print('Строка для хранения в базе данных: ' + hashed_password)
-old_pass = input('Введите пароль еще раз для проверки: ')
-
-if check_password(hashed_password, old_pass):
-    print('Вы ввели правильный пароль')
-else:
-    print('Извините, но пароли не совпадают')
+if __name__ == '__main__':
+    app.run()

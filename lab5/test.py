@@ -1,25 +1,22 @@
-from flask import Flask,request,render_template
-from task_1 import
+import sqlite3
 
-app = Flask(__name__)
+db = sqlite3.connect('users.db')
+sql = db.cursor()
 
+sql.execute("""CREATE TABLE IF NOT EXISTS users (login TEXT, password TEXT, cash BIGINT)""")
 
-@app.route('/')
-def hello_world():
-    return render_template("login.html")
-database={'nachi':'123','james':'aac','karthik':'asdsf'}
+db.commit()
 
-@app.route('/form_login',methods=['POST','GET'])
-def login():
-    name1=request.form['username']
-    pwd=request.form['password']
-    if name1 not in database:
-	    return render_template('login.html',info='Invalid User')
-    else:
-        if database[name1]!=pwd:
-            return render_template('login.html',info='Invalid Password')
-        else:
-	         return render_template('home.html',name=name1)
+user_login = input('Login: ')
+user_password = input('Password: ')
 
-if __name__ == '__main__':
-    app.run()
+sql.execute("SELECT login from users WHERE login = '{user_login}'")
+if sql.fetchone() is None:
+    sql.execute(f"INSERT INTO users VALUES(?, ?, ?)", (user_login, user_password, 0))
+    db.commit()
+    print("Registered")
+else:
+    print("Already exists")
+
+for value in sql.execute("SELECT * FROM users"):
+    print(value)

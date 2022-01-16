@@ -34,12 +34,12 @@ def ciphering_something(text_to_cipher):
     return list_cipher_key_nonce
 
 def ciphering_something_key_nonce(list_tocipher_key_nonce):
-    print("ciphering_something_key_nonce income: ", list_tocipher_key_nonce)
+    #print("ciphering_something_key_nonce income: ", list_tocipher_key_nonce)
     cipher_text = XSalsa20_xor(list_tocipher_key_nonce[0].encode(), list_tocipher_key_nonce[2], list_tocipher_key_nonce[1])
     return cipher_text
 
 def deciphering_something(list_toDecipher_key_nonce):
-    print("deciphering something income: ", list_toDecipher_key_nonce)
+    #print("pos 1324 deciphering something income: ", list_toDecipher_key_nonce)
     deciphered = XSalsa20_xor(list_toDecipher_key_nonce[1], list_toDecipher_key_nonce[3], list_toDecipher_key_nonce[2])
     return deciphered
 
@@ -69,12 +69,12 @@ def registration(list_login_password_homecity_phonenumber):
 def check_user(list_login_password_userToCheck):
     user = []
     user_to_check = list_login_password_userToCheck[2]
-    print(list_login_password_userToCheck)
+    #print(list_login_password_userToCheck)
     for i in database:
-        print("I'm in 0001")
+        #print("I'm in 0001")
         if i[0] == list_login_password_userToCheck[0]:
-            print("in 0002")
-            print(i)
+            #print("in 0002")
+            #print(i)
             user = i
     if not user:
         return "No such user"
@@ -94,9 +94,9 @@ def check_user(list_login_password_userToCheck):
             if i[0] == user_to_check:
                 user_to_check_from_db = i
                 str_to_dechiper = user_to_check_from_db[1]
-                str_hm_pn_userToCheck = deciphering_something([str_to_dechiper, temp_key, temp_nonce])
+                str_hm_pn_userToCheck = deciphering_something(["", str_to_dechiper, temp_key, temp_nonce])
                 list_plain_homecity_phonenumber = str_hm_pn_userToCheck.decode().split(":")
-                user_to_check_answer = "User: " + user_to_check + "Home city: " + list_plain_homecity_phonenumber[0] + "Phone number: " + list_plain_homecity_phonenumber[1]
+                user_to_check_answer = "User: " + user_to_check + ", Home city: " + list_plain_homecity_phonenumber[0] + ", Phone number: " + list_plain_homecity_phonenumber[1]
             if not user_to_check_from_db:
                 user_to_check_answer = "no such user in db"
         return [login_answer, user_to_check_answer]

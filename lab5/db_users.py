@@ -1,13 +1,14 @@
 import sqlite3
+from sqlalchemy import create_engine
 
 db = sqlite3.connect('users_info.db')
 sql = db.cursor()
+engine=create_engine('sqlite:///users_info.db', echo=True, connect_args={"check_same_thread": False})
 
 sql.execute("""CREATE TABLE IF NOT EXISTS users_info (
 login TEXT, 
-hash TEXT, 
-key_to_hash TEXT,
-salt TEXT,
+hash_salt_ciphered TEXT, 
+key_to_ciphering TEXT,
 nonce TEXT
 )""")
 db.commit()
@@ -15,37 +16,18 @@ db.commit()
 #user_login = input('Login: ')
 #user_password = input('Password: ')
 
-def new_user(list_login_hash_key_salt_nonce):
-    login = list_login_hash_key_salt_nonce[0]
-    hash_pas = list_login_hash_key_salt_nonce[1]
-    key_hash = list_login_hash_key_salt_nonce[2]
-    salt = list_login_hash_key_salt_nonce[3]
-    nonce = list_login_hash_key_salt_nonce[4]
-    sql.execute("SELECT login from users_info WHERE login = '{login}'")
-    if sql.fetchone() is None:
-        sql.execute(f"INSERT INTO users_info VALUES(?, ?, ?, ?, ?)", (login, hash_pas, key_hash, salt, nonce))
-        db.commit()
-        print(1)
-    else:
-        print(0)
+def new_user(list_login_cipher_key_nonce):
+    login = list_login_cipher_key_nonce[0]
+    hash_salt_ciphered = list_login_cipher_key_nonce[1]
+    key_to_ciphering = list_login_cipher_key_nonce[2]
+    nonce = list_login_cipher_key_nonce[3]
+    sql.execute("SELECT login FROM users_info")
+    sql.execute(f"INSERT INTO users_info VALUES(?, ?, ?, ?)", (login, hash_salt_ciphered, key_to_ciphering, nonce))
+    db.commit()
 
 def check_user(login):
-    sql.execute("SELECT login from users_info WHERE login = '{login}'")
-    if sql.fetchone() is None:
-        sql.execute(f"INSERT INTO users_info VALUES(?, ?, ?, ?, ?)", (login, hash_pas, key_hash, salt, nonce))
-        db.commit()
-        print(1)
-    else:
-        print(0)
+    sql.execute("SELECT login FROM users_info WHERE login = '{login}'")
+    for line in sql.execute("SELECT * FROM users_info"):
+        if line[0] == login:
+            return line
 
-
-sql.execute("SELECT login from users WHERE login = '{user_login}'")
-if sql.fetchone() is None:
-    sql.execute(f"INSERT INTO users VALUES(?, ?, ?)", (user_login, user_password, 0))
-    db.commit()
-    print("Registered")
-else:
-    print("Already exists")
-
-for value in sql.execute("SELECT * FROM users"):
-    print(value)

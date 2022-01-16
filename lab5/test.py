@@ -18,5 +18,8 @@ if sql.fetchone() is None:
 else:
     print("Already exists")
 
-for value in sql.execute("SELECT * FROM users"):
-    print(value)
+login_to_search = "DFE"
+
+for i in sql.execute('SELECT * FROM users'):
+    if i[0] == "dsf":
+        print(i)

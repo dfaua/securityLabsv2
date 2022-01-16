@@ -15,3 +15,6 @@ db.commit()
 
 user_login = input('Login: ')
 user_password = input('Password: ')
+
+for value in sql.execute("SELECT * FROM users"):
+    print(value)

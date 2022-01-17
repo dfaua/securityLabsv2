@@ -112,20 +112,36 @@ list_keyboard_letters_decimal = [113, 119, 101, 114, 116, 121, 117, 105,
                                  106, 107, 108, 122, 120, 99, 118, 98,
                                  110, 109, 113, 119, 101, 114, 116, 121,
                                  117, 105, 111, 112, 97, 115, 100]
+list_61k_common_words = []
 
 file = open('my_pass_list.txt', 'w')
+file1 = open('61kENGwords.txt', 'r')
 
+def file_to_list(file):
+    for i in file:
+        if len(i) > 5:
+            list_61k_common_words.append(i[:-1])
 def str_to_list(str):
     list = []
     for i in str:
         list.append(i)
     return list
+def just_word ():
+    rand_word = random.randint(0, len(list_61k_common_words) - 1)
+    password = list_61k_common_words[rand_word]
+    return password
 def real_unique_password():
     length_of_password = random.randint(8, 14)
     password = ""
     for i in range(length_of_password):
         rand_chr = chr(random.randint(48, 126))
         password += rand_chr
+    return password
+def random_numbers():
+    password = ""
+    for i in range(random.randint(0, 12)):
+        rnd_num = random.randint(0, 9)
+        password += str(rnd_num)
     return password
 def mix_upped_lower_case(password_to_mix):
     temp_password = str_to_list(password_to_mix)
@@ -191,33 +207,45 @@ def sequences_letters():
 
 
 def writing_file():
-    for i in range(20000):
+    for i in range(30000):
         for k in range(0, 25):
-            guess = random.randint(1, 7)
+            guess = random.randint(1, 10)
             if guess == 1:
-                password = mix_upped_lower_case(combine_words_from_file())
+                password = mix_upped_lower_case(just_word())
                 file.write(password + '\n')
             if guess == 2:
-                password = replace_letter_with_symbol(combine_words_from_file())
+                password = replace_letter_with_symbol(just_word())
                 file.write(password + '\n')
             if guess == 3:
                 password = sequences_letters()
                 file.write(password + '\n')
             if guess == 4:
-                password = combine_words_from_file()
+                password = just_word()
                 file.write(password + '\n')
             if guess == 5:
                 password = add_numbers(sequences_letters())
                 file.write(password + '\n')
             if guess == 6:
-                password = add_numbers(combine_words_from_file())
+                password = add_numbers(just_word())
                 file.write(password + '\n')
             if guess == 7:
                 password = mix_upped_lower_case(sequences_letters())
                 file.write(password + '\n')
+            if guess == 8:
+                password = just_word()
+                file.write(password + '\n')
+            if guess == 9:
+                password = just_word()
+                file.write(password + '\n')
+            if guess == 10:
+                password = just_word()
+                file.write(password + '\n')
         file.write(real_unique_password() + '\n')
 
+file_to_list(file1)
 writing_file()
+#file_to_list(file1)
+#print(list_61k_common_words)
 
 
 

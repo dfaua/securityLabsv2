@@ -1,6 +1,9 @@
+file1 = open('61kENGwords.txt', 'r')
 
+list_61k_common_words = []
 
-file = open('my_pass_list.txt', 'r')
+for i in file1:
+    if len(i) > 5:
+        list_61k_common_words.append(i[:-1])
 
-for i in file:
-    print(i)
+print(len(list_61k_common_words))

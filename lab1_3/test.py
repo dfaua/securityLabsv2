@@ -1,5 +1,6 @@
-l = []
-for i in range(ord('A'), ord('Z')):
-    l.append(chr(i))
+dict = {'ABC' : '123', 'BCD' : '345'}
 
-print(l)
+try:
+    print(dict['EFG'])
+except KeyError:
+    pass

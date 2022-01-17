@@ -18,7 +18,7 @@ def md5_cipher_csv ():
 
 def md5_cipher_txt ():
     for i in file_to_read:
-        temp = hashlib.md5(i.encode()).digest()
+        temp = hashlib.md5(i.encode()).hexdigest()
         file_to_write.write(temp + '\n')
 
 
@@ -33,4 +33,5 @@ def sha1_cipher ():
             temp_list = [temp, salt]
             writer.writerow(temp_list)
 
-sha1_cipher()
+#sha1_cipher()
+md5_cipher_txt()

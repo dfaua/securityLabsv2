@@ -107,14 +107,19 @@ list_common_words = ['the', 'you', 'that', 'he', 'was', 'for', 'on', 'are',
                      'share', 'station', 'dad', 'bread', 'charge', 'proper', 'bar', 'offer', 'segment', 'slave', 'duck', 'instant',
                      'market', 'degree', 'populate', 'chick', 'dear', 'enemy', 'reply', 'drink', 'occur', 'support', 'speech',
                      'nature', 'range', 'steam', 'motion', 'path', 'liquid', 'log', 'meant', 'quotient', 'teeth', 'shell', 'nec']
+list_keyboard_letters_decimal = [113, 119, 101, 114, 116, 121, 117, 105,
+                                 111, 112, 97, 115, 100, 102, 103, 104,
+                                 106, 107, 108, 122, 120, 99, 118, 98,
+                                 110, 109, 113, 119, 101, 114, 116, 121,
+                                 117, 105, 111, 112, 97, 115, 100]
 
+file = open('my_pass_list.txt', 'w')
 
 def str_to_list(str):
     list = []
     for i in str:
         list.append(i)
-    return  list
-
+    return list
 def real_unique_password():
     length_of_password = random.randint(8, 14)
     password = ""
@@ -122,7 +127,6 @@ def real_unique_password():
         rand_chr = chr(random.randint(48, 126))
         password += rand_chr
     return password
-
 def mix_upped_lower_case(password_to_mix):
     temp_password = str_to_list(password_to_mix)
     length = len(temp_password)
@@ -138,22 +142,94 @@ def mix_upped_lower_case(password_to_mix):
                 temp_password.remove(temp_password[i])
                 temp_password.insert(i, chr(ord(temp_letter) - 32))
     return "".join([str(elem) for elem in temp_password])
-
 def combine_words_from_file():
-    password_length = random.randint(6, 10)
+    password_length = random.randint(5, 8)
     password = ""
-    temp = file_common_eng_words.read()
-    temp = str.split(temp)
     while (len(password) <= password_length):
-        rand_word = random.randint(0, len(temp) - 1)
-        password += temp[rand_word]
+        temp = random.randint(0, 950)
+        password += list_common_words[temp]
+    return password
+def replace_letter_with_symbol(password):
+    upd_password = ""
+    for i in password:
+        temp = i
+        if ord(i) == 105:
+            temp = "1"
+        if ord(i) == 111:
+            temp = "0"
+        upd_password += temp
+    return upd_password
+def add_numbers(password_to_update):
+    option = random.randint(1, 3)
+    front = ""
+    end = ""
+    password = ""
+    if option == 1:
+        number_numbers = random.randint(1, 8)
+        for i in range(1, number_numbers):
+            front += str(i)
+    if option == 2:
+        number_numbers = random.randint(1, 8)
+        for i in range(1, number_numbers):
+            end += str(i)
+    if option == 3:
+        number_numbers_front = random.randint(1, 5)
+        number_numbers_end = random.randint(1, 5)
+        for i in range(1, number_numbers_front):
+            front += str(i)
+        for i in range(1, number_numbers_end):
+            end += str(i)
+    password = front + password_to_update + end
+    return password
+def sequences_letters():
+    guess = random.randint(0, 26)
+    number = random.randint(6, 9)
+    password = ""
+    for i in range(number):
+        password += chr(list_keyboard_letters_decimal[guess + i])
     return password
 
-def replace_letter_with_symbol(password):
-    pass_list = str.split(password)
+
+def writing_file():
+    for i in range(4000):
+        for k in range(0, 25):
+            guess = random.randint(1, 7)
+            if guess == 1:
+                password = mix_upped_lower_case(combine_words_from_file())
+                file.write(password + '\n')
+            if guess == 2:
+                password = replace_letter_with_symbol(combine_words_from_file())
+                file.write(password + '\n')
+            if guess == 3:
+                password = sequences_letters()
+                file.write(password + '\n')
+            if guess == 4:
+                password = combine_words_from_file()
+                file.write(password + '\n')
+            if guess == 5:
+                password = add_numbers(sequences_letters())
+                file.write(password + '\n')
+            if guess == 6:
+                password = add_numbers(combine_words_from_file())
+                file.write(password + '\n')
+            if guess == 7:
+                password = mix_upped_lower_case(sequences_letters())
+                file.write(password + '\n')
+        file.write(real_unique_password() + '\n')
+
+writing_file()
 
 
-pas = real_unique_password()
-print(pas)
-print("mixed password: ", mix_upped_lower_case(pas))
-print(combine_words_from_file())
+
+
+#pas = real_unique_password()
+#print("real unique password: ", pas)
+#print("mixed password: ", mix_upped_lower_case(pas))
+#mixed_words = combine_words_from_file()
+#print("mixed words: ", mixed_words)
+#replaced_symbols = replace_letter_with_symbol(mixed_words)
+#print("replaced symbols: ", replaced_symbols)
+#with_add_numbers = add_numbers(replaced_symbols)
+#print("with add numbers: ", with_add_numbers)
+#sequances = sequences_letters()
+#print("sequances: ", sequances)

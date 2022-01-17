@@ -1,5 +1,3 @@
-string = "texttest"
+import random
 
-string = string[:-2]
-
-print(string)
+print(random.randint(0,3))

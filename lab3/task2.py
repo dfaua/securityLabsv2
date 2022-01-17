@@ -1,35 +1,41 @@
-import warnings
-from randomgen.entropy import random_entropy
-from randomgen import Generator, MT19937
-import time
 import json
-import random
+import time
 import requests
 from MT_generator import seed_mt, extract_number
-warnings.filterwarnings("ignore", "Generator", FutureWarning)
+import random
 
-player_ID = random.randint(1345, 1242415)
-reg = requests.get("http://95.217.177.249/casino/createacc?id="+str(player_ID))
+player_ID = random.randint(23421, 1234123)
+
+url_bet1_num1 = "http://95.217.177.249/casino/playMt?id=" + str(player_ID) + "&bet=1&number=1"
+url_bet100 = "http://95.217.177.249/casino/playMt?id=" + str(player_ID) + "&bet=100&number="
+url_bet500 = "http://95.217.177.249/casino/playMt?id=" + str(player_ID) + "&bet=500&number="
+url_bet1000 = "http://95.217.177.249/casino/playMt?id=" + str(player_ID) + "&bet=1000&number="
+
+
 epoch_time = int(time.time())
-url_base = "http://95.217.177.249/casino/playLcg?id=" + str(player_ID) + "&bet="
-url_after_bet = "&number="
-first_bet = requests.get(url_base + "1" + url_after_bet + "1")
-json_data = json.loads(first_bet.text)
-real_number = json_data['realNumber']
-print("pos 228 realNumber: ", real_number)
+reg = requests.get("http://95.217.177.249/casino/createacc?id=" + str(player_ID))
+back_text = reg.text
+res = requests.get(url_bet1_num1)
+res_text = res.text
+print("res text: ", res_text)
+json_data = json.loads(res_text)
+first_real_number = json_data["realNumber"]
 
-for i in range (-100, 100):
+for i in range(-100, 100):
     seed_mt(epoch_time + i)
     number_to_bet = extract_number()
-    if real_number == number_to_bet:
-        print("YESS")
-        win_number = extract_number()
-        bet = url_base + "250" + url_after_bet + str(win_number)
-        res = requests.get(bet)
-       
 
-
-
-
-
-
+    if (first_real_number == number_to_bet):
+        print("YESSSSS")
+        winning_number = extract_number()
+        #print ("pos 11 winning number: ", winning_number)
+        res = requests.get(url_bet100 + str(winning_number))
+        res_text = res.text
+        winning_number = extract_number()
+        res = requests.get(url_bet500 + str(winning_number))
+        res_text = res.text
+        winning_number = extract_number()
+        res = requests.get(url_bet1000 + str(winning_number))
+        res_text = res.text
+        print(res_text)
+        break

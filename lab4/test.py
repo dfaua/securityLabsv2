@@ -1,11 +1,8 @@
 from itertools import islice
 
 file_common_eng_words = open("resources/1000_most_common.txt")
-i = 0
-string = ""
+list_common_words = []
 for line in file_common_eng_words:
-    if i == 12:
-        string = line
-    i += 1
+    list_common_words.append(line[:-1])
 
-print(string)
+print(list_common_words)

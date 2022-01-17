@@ -3,39 +3,32 @@ from randomgen.entropy import random_entropy
 from randomgen import Generator, MT19937
 import time
 import json
-import math
+import random
 import requests
-from MT_generator import mt_seed, extract_number
+from MT_generator import seed_mt, extract_number
 warnings.filterwarnings("ignore", "Generator", FutureWarning)
 
-
-player_ID = "35742"
-url_base = "http://95.217.177.249/casino/playMt?id=" + player_ID + "&bet="
+player_ID = random.randint(1345, 1242415)
+reg = requests.get("http://95.217.177.249/casino/createacc?id="+str(player_ID))
+epoch_time = int(time.time())
+url_base = "http://95.217.177.249/casino/playLcg?id=" + str(player_ID) + "&bet="
 url_after_bet = "&number="
+first_bet = requests.get(url_base + "1" + url_after_bet + "1")
+json_data = json.loads(first_bet.text)
+real_number = json_data['realNumber']
+print("pos 228 realNumber: ", real_number)
+
+for i in range (-100, 100):
+    seed_mt(epoch_time + i)
+    number_to_bet = extract_number()
+    if real_number == number_to_bet:
+        print("YESS")
+        win_number = extract_number()
+        bet = url_base + "250" + url_after_bet + str(win_number)
+        res = requests.get(bet)
+       
 
 
-def send_request(number_to_bet, delay):
-    bet = "1"
-    number_to_bet = str(number_to_bet)
-    url_to_send = url_base + bet + url_after_bet + number_to_bet
-    #print(url_to_send)
-    res = requests.get(url_to_send)
-    #print(res)
-    #print("time delay: ", delay, "\nnumber_to_bet: ", number_to_bet, "\n", res.text)
-    print(res.text)
-
-def try_to_find_the_correct_delay():
-    epoch_time = int(time.time())
-    #print("original epoch time: ", epoch_time)
-    for i in range(-2, 2):
-        epoch_time += i
-        #print("modified epoch time: ", epoch_time)
-        mt_seed(epoch_time)
-        number_to_bet = extract_number()
-        print("number to bet: ", number_to_bet)
-        send_request(number_to_bet, i)
-
-try_to_find_the_correct_delay()
 
 
 

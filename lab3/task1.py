@@ -2,7 +2,7 @@ import json
 import math
 import requests
 
-player_ID = "345345"
+player_ID = "357422"
 url_base = "http://95.217.177.249/casino/playLcg?id=" + player_ID + "&bet="
 url_after_bet = "&number="
 m = 4294967296

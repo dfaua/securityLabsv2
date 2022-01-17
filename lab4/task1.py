@@ -191,7 +191,7 @@ def sequences_letters():
 
 
 def writing_file():
-    for i in range(4000):
+    for i in range(20000):
         for k in range(0, 25):
             guess = random.randint(1, 7)
             if guess == 1:
